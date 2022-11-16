@@ -31,6 +31,10 @@ public class CategoryController{
         BeanUtils.copyProperties(categoryDto, entity);
         categoryService.save(entity);
         modelMap.addAttribute("message", "Category is saved!!");
+        if (!everythingOkay()) {
+            redirAttrs.addFlashAttribute("error", "The error XYZ occurred.");
+            return "redirect:/settings/";
+        }
         System.out.println("add susscessfully!!!");
 
         return new ModelAndView("forward:/admin/categories", modelMap);
