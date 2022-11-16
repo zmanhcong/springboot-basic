@@ -13,8 +13,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDto implements Serializable{  /*add Serializable for check input of user*/
-    private int categoryId;
+    private Long categoryId;
     @NotEmpty
     @Length(min = 5)
     private String name;
+    private Boolean IsEdit = false;
 }
