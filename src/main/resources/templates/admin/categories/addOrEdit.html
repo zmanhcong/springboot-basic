@@ -20,7 +20,7 @@
         </header>
         <section class="row">
             <div class="col-6 offset-3 mt-4">
-                <form th:action="@{/admin/categories/saveOrUpdate}" th:object="${category}" method="POST">
+                <form method="POST">
                     <div class="card">
                         <div class="card-header">
                             <h2>Add New Category</h2>
@@ -30,24 +30,22 @@
                             <div class="form-group">
                                 <label for="categoryId">Category ID:</label>
                                 <input type="text" class="form-control" name="categoryId" id="categoryId" aria-describedby="categoryIdHid"
-                                       th:field="*{categoryId}"
+
                                        placeholder="">
                                 <small id="categoryIdHid" class="form-text text-muted">Category is require</small>
                             </div>
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHid"
-                                       th:field="*{name}"
+
                                        placeholder="">
                                 <small id="nameHid" class="form-text text-muted">Name is require</small>
                             </div>
                         </div>
                         <div class="card-footer text-muted">
                             <button type="reset" class="btn btn-secondary">Reset</button>
-                            <a th:href="@{/admin/categories}" class="btn btn-success">List categories</a>
-                            <button class="btn btn-success">List Category</button>
+                            <a class="btn btn-success">List categories</a>
                             <button class="btn btn-primary" > <i class="fas fa-save"></i>  Save</button>
-
                         </div>
                     </div>
                 </form>
