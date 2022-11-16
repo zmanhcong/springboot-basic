@@ -40,16 +40,17 @@ public class CategoryController{
         modelMap.addAttribute("message", "Category is saved!!");
         System.out.println("add susscessfully!!!");
 
-        return new ModelAndView("forward:/admin/categories", modelMap);
+        return new ModelAndView("forward:/admin/categories/list", modelMap);
     }
 
-    @RequestMapping("")
+    @RequestMapping("list")
     public String list(ModelMap modelMap){
         Iterable<Category>list = categoryService.findAll();
         modelMap.addAttribute("categories", list);
         return "admin/categories/category-list";
     }
 
+    //Update category
     @GetMapping("edit/{categoryId}")
     public ModelAndView edit(ModelMap modelMap, @PathVariable("categoryId") Long categoryId){
         Optional<Category> findIdInDB = categoryService.findById(categoryId);
@@ -64,7 +65,14 @@ public class CategoryController{
             return new ModelAndView("admin/categories/addOrEdit",modelMap); //sử dụng ModeandView nên phải return ra modeAndView. và ModeAndView sẽ render sang view sử dụng như return thường thui
         }
         modelMap.addAttribute("message", "Category is not exited");
-        return new ModelAndView("forward:/admin/categories", modelMap);
+        return new ModelAndView("forward:/admin/categories/list", modelMap);
     }
 
+    @GetMapping("delete/{categoryId}")
+    public ModelAndView delete(ModelMap modelMap,
+                               @PathVariable("categoryId") Long categoryId) {
+        categoryService.deleteById(categoryId);
+        modelMap.addAttribute("message", "Category is deleted!!!");
+        return new ModelAndView("forward:/admin/categories/list", modelMap);
+    }
 }
