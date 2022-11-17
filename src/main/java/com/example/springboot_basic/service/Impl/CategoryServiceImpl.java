@@ -7,6 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,19 @@ import java.util.function.Function;
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
+
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+    }
+    @Override
+    @Query(value = "SELECT * FROM categories c WHERE c.category_name LIKE %:keyword%", nativeQuery = true)
+    public List<Category> findAllNative(String keyword) {
+        return categoryRepository.findAllNative(keyword);
+    }
+
+    @Override
+    public List<Category> findByNameContaining(String name) {
+        return categoryRepository.findByNameContaining(name);
     }
 
     public List<Category> findAll() {

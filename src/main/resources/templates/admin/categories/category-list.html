@@ -16,18 +16,31 @@
 <body>
     <main class="container">
         <header class="row text-center">
-
         </header>
-        <section class="row">
+        <section class="row mt-2 mb-4">
             <div class="col offset-1 mt-4">
                 <div class="card">
                     <div class="card-header">
                         List of Categories
                     </div>
                     <div class="card-body">
+
                         <div class="alert alert-primary" role="alert" th:text="${message}" th:if="${message}"></div>
                         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
-                        <table class="table table-striped table-inverse ">
+
+                        <form th:action="@{/admin/categories/search}" >
+                            <div class="form-inline float-left">
+                                <input class="form-control mr-sm-2" type="text" name="name" id="name">
+                                <button class="btn btn-outline-success my-2 my-sm-0">
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+                        <div class="float-right">
+                            <a class="btn btn-outline-info" th:href="@{'/admin/categories/add/'}">Add new category</a>
+                        </div>
+
+                        <table class="table table-striped table-inverse">
                             <thead class="thead-inverse">
                             <tr>
                                 <th>Category ID</th>

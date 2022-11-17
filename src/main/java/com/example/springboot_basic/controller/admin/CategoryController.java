@@ -2,6 +2,7 @@ package com.example.springboot_basic.controller.admin;
 
 import com.example.springboot_basic.domain.Category;
 import com.example.springboot_basic.model.CategoryDto;
+import com.example.springboot_basic.repository.CategoryRepository;
 import com.example.springboot_basic.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,6 +24,10 @@ import java.util.Optional;
 public class CategoryController{
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @GetMapping("add")
     public String add(Model model){
         model.addAttribute("category", new CategoryDto());
@@ -47,7 +54,7 @@ public class CategoryController{
     public String list(ModelMap modelMap){
         Iterable<Category>list = categoryService.findAll();
         modelMap.addAttribute("categories", list);
-        return "admin/categories/category-list";
+        return "/admin/categories/category-list";
     }
 
     //Update category
@@ -74,5 +81,13 @@ public class CategoryController{
         categoryService.deleteById(categoryId);
         modelMap.addAttribute("message", "Category is deleted!!!");
         return new ModelAndView("forward:/admin/categories/list", modelMap);
+    }
+
+    @GetMapping("/search")
+    public String search(ModelMap modelMap, @RequestParam(name = "name") String name) {
+        List<Category> listCategory_db =  categoryService.findAllNative(name);
+        modelMap.addAttribute("categories", listCategory_db);
+//        return new ModelAndView("forward:/admin/categories/list", modelMap);
+        return "/admin/categories/category-list";
     }
 }
