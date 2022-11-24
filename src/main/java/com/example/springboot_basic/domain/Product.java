@@ -33,6 +33,10 @@ public class Product implements Serializable {
     private Date enteredDate;
     @Column(nullable = false)
     private short status;
-    @Column(nullable = false)
-    private int categoryId;
+//    @Column(nullable = false)
+//    private int categoryId;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private Category category;
 }
