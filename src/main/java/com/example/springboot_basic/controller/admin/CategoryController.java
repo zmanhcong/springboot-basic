@@ -6,17 +6,22 @@ import com.example.springboot_basic.repository.CategoryRepository;
 import com.example.springboot_basic.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -89,5 +94,42 @@ public class CategoryController{
         modelMap.addAttribute("categories", listCategory_db);
 //        return new ModelAndView("forward:/admin/categories/list", modelMap);
         return "/admin/categories/category-list";
+    }
+
+    //Pagination
+    @GetMapping("searchpaginated")
+    public String search(ModelMap model,
+                         @RequestParam(name = "name", required = false) String name,
+                         @RequestParam("page")Optional<Integer> page,
+                         @RequestParam("size")Optional<Integer> size) {
+        int currentPage = page.orElse(1);  //if receive value form html, use that value, else use value = 1
+        int pageSize = size.orElse(5);
+
+        Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("name"));
+        Page<Category> resultPage = null;
+
+        if(StringUtils.hasText(name)) {    //Nếu có imput đầu vào, thì findByName Containing, và trả tra view name đó để hiển thị cho user biết là đang search bằng keyword gì, ếu không có keyword input đầu vào thì sẽ findAll.
+            resultPage = categoryService.findByNameContaining(name, pageable);
+            model.addAttribute("name", name);  // lấy cái name để view truyền param khi chuyển page. ví dụ: categories/searchpaginated(name = ${name},
+        }
+        else {
+            resultPage = categoryService.findAll(pageable);
+        }
+
+        int totalPages = resultPage.getTotalPages() - 1;
+        System.out.printf("totalPage is: " + totalPages + "%n" );
+        if (totalPages > 0) {
+            int start = Math.max(1, currentPage - 2); //ページStartは最低の値は１
+            int end = Math.min(currentPage + 2, totalPages);
+
+            List<Integer>pageNumbers = IntStream.rangeClosed(start, end)
+                    .boxed()
+                    .collect(Collectors.toList());
+            System.out.printf("pageNumbers is: " + pageNumbers + "%n" ); //Output sẽ là page number dùng hiển thị ở view, ví dụ: [1, 2, 3]  => First 1 2 3 Last
+            model.addAttribute("pageNumbers",pageNumbers);
+        }
+        model.addAttribute("categoryPage", resultPage);
+
+        return "/admin/categories/searchpaginated";
     }
 }

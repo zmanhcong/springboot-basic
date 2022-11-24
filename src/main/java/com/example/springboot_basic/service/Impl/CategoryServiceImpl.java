@@ -19,6 +19,10 @@ import java.util.function.Function;
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
+    @Override
+    public Page<Category> findByNameContaining(String name, Pageable pageable) {
+        return categoryRepository.findByNameContaining(name, pageable);
+    }
 
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
@@ -101,6 +105,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll(example, sort);
     }
 
+    @Override
     public Page<Category> findAll(Pageable pageable) {
         return categoryRepository.findAll(pageable);
     }
