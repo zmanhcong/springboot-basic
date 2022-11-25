@@ -1,6 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Title</title>
   <!-- Required meta tags -->
@@ -16,31 +15,22 @@
 </head>
 <body>
 <main class="container">
-  <header class="row">
-    <div class="col">
-      <div th:replace="admin/fragments/header:: header"></div>
-    </div>
+  <header class="row text-center">
   </header>
-  <nav class="row">
-    <div class="col">
-      <div th:replace="admin/fragments/nav:: nav"></div>
-    </div>
-  </nav>
-
   <section class="row">
-    <div class="col mt-4">
+    <div class="col offset-1 mt-4">
       <div class="card">
         <div class="card-header">
           List of Categories
         </div>
         <div class="card-body">
-          <div th:if="${message != null}" class="alert alert-primary" role="alert">
+          <div   class="alert alert-primary" role="alert">
             <i>[[${message}]]</i>
           </div>
 
           <div class="row mt-2 mb-2">
             <div class="col">
-              <form th:action="@{/admin/categories/searchpaginated}">
+              <form  >
                 <div class="form-inline  float-left">
                   <label for="name">Name:</label>
                   <input type="text" class="form-control ml-2" name="name" id="name"
@@ -50,12 +40,12 @@
               </form>
               <div class=" float-right">
                 <a class="btn btn-outline-primary"
-                   th:href="@{/admin/categories/add}">Add New Categories</a>
+                    >Add New Categories</a>
               </div>
             </div>
           </div>
           <row>
-            <div class="col" th:if="${!categoryPage.hasContent()}">  <!--//page nào không có category thì hiển thị message dưới đây.-->
+            <div class="col"  >
               <div class="alert alert-primary" role="alert">
                 <strong>No Category found</strong>
               </div>
@@ -63,7 +53,7 @@
           </row>
 
           <table class="table table-striped table-inverse "
-                 th:if="${categoryPage.hasContent()}">
+                 >
             <thead class="thead-inverse">
             <tr>
               <th>Category ID</th>
@@ -72,15 +62,15 @@
             </tr>
             </thead>
             <tbody>
-              <tr  th:each=" category, iStat: ${categoryPage.content}">  <!--content trả về danh sách các category và với mỗi category thì hiện thị id, name,, iStat là lặp, cách này giống với cách ở bên list thôi.-->
-                <td scope="row">[[${category.categoryId}]]</td>
-                <td th:text="${category.name}"></td>
-                <td>
-                  <a th:href="@{'/admin/categories/view/' + ${category.categoryId}}" class="btn btn-outline-info"><i class="fas fa-info"></i></a>
-                  <a th:href="@{'/admin/categories/edit/' + ${category.categoryId}}" class="btn btn-outline-warning"><i class="fas fa-edit"></i></a>
-                  <a th:href="@{'/admin/categories/delete/' + ${category.categoryId}}" class="btn btn-outline-danger"><i class="fas fa-recycle"></i></a>
-                </td>
-              </tr>
+            <tr  >  <!--content trả về danh sách các category và với mỗi category thì hiện thị id, name-->
+              <td scope="row">[[${category.categoryId}]]</td>
+              <td  ></td>
+              <td>
+                <a  class="btn btn-outline-info"><i class="fas fa-info"></i></a>
+                <a   class="btn btn-outline-warning"><i class="fas fa-edit"></i></a>
+                <a   class="btn btn-outline-danger"><i class="fas fa-recycle"></i></a>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -90,33 +80,31 @@
               <label for="size">Page size: </label>
               <select name="size" id="size" class="form-control"
                       onchange="this.form.submit()">   <!--onchange dùng để nhận biết thay đổi, rồi gửi về sever-->
-                <option th:selected="${categoryPage.size == 5}" value="5">5</option>
-                <option th:selected="${categoryPage.size == 10}"  value="10">10</option>
-                <option th:selected="${categoryPage.size == 15}"  value="15">15</option>
-                <option th:selected="${categoryPage.size == 20}"  value="20">20</option>
-                <option th:selected="${categoryPage.size == 30}"  value="30">30</option>
+                <option value="5">5</option>
+                <option   value="10">10</option>
+                <option   value="15">15</option>
+                <option   value="20">20</option>
+                <option   value="30">30</option>
               </select>
             </div>
           </form>
           <nav aria-label="Page navigation"
-               th:if="${categoryPage.totalPages > 0}">
+                >
             <ul class="pagination justify-content-center">
-              <li th:class="${1 == categoryPage.number + 1} ? 'page-item active' : 'page-item'">
-                <a th:href="@{/admin/categories/searchpaginated(name = ${name}, size = ${categoryPage.size}, page=${1})}"
+              <li  >
+                <a  "
                    class="page-link"> First</a>
               </li>
 
               <li class="page-item active"
-                  th:each="pageNumbers: ${pageNumbers}"
-                  th:if="${categoryPage.totalPages > 1}"
-                  th:class="${pageNumbers == categoryPage.number } ? 'page-item active' : 'page-item'">
-                <a th:href="@{/admin/categories/searchpaginated(name = ${name}, size = ${categoryPage.size}, page=${pageNumbers})}"
+                  >
+                <a
                    class="page-link"
-                   th:text="${pageNumbers}"> </a>
+                   > </a>
               </li>
 
-              <li th:class="${categoryPage.totalPages == categoryPage.number + 1} ? 'page-item ative' : 'page-item'">
-                <a th:href="@{/admin/categories/searchpaginated(name = ${name}, size = ${categoryPage.size}, page=${categoryPage.totalPages - 1})}"
+              <li  >
+                <a
                    class="page-link"> Last</a>
               </li>
             </ul>
@@ -125,11 +113,7 @@
       </div>
     </div>
   </section>
-  <footer class="row">
-    <div class="col">
-      <div th:replace="admin/fragments/footer:: footer"></div>
-    </div>
-  </footer>
+  <footer class="row"></footer>
 </main>
 
 
