@@ -57,7 +57,7 @@ public class CategoryController{
 
     @RequestMapping("list")
     public String list(ModelMap modelMap){
-        Iterable<Category>list = categoryService.findAll();
+        List<Category>list = categoryService.findAll();
         modelMap.addAttribute("categories", list);
         return "/admin/categories/category-list";
     }

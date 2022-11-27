@@ -37,6 +37,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findByNameContaining(String name) {
         return categoryRepository.findByNameContaining(name);
     }
+    @Override
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
+    }
 
     @Override
     public List<Category> findAll(Sort sort) {

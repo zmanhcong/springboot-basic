@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-    private int productId;
+    private long productId;
     private String name;
     private int quantity;
     private  double unitPrice;
@@ -19,5 +19,6 @@ public class ProductDto {
     private double discount;
     private Date enteredDate;
     private short status;
-    private int categoryId;
+    private long categoryId;
+    private boolean isEdit;
 }

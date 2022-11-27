@@ -23,6 +23,7 @@ public interface CategoryService extends CrudRepository<Category, Long> {
 
     List<Category> findByNameContaining(String name);
 
+    List<Category> findAll();
 
     List<Category> findAll(Sort sort);
 
@@ -64,11 +65,6 @@ public interface CategoryService extends CrudRepository<Category, Long> {
     Optional<Category> findById(Long aLong);
 
     boolean existsById(Long aLong);
-
-    @Override
-    default List<Category> findAll() {
-        return null;
-    }
 
     long count();
 

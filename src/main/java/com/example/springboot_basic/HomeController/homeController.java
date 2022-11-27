@@ -10,7 +10,7 @@ public class homeController {
     @GetMapping("/")
     public String home1(Model model) {
         model.addAttribute("something", "hello from controller");
-        return "admin/categories/search";
+        return "admin/categories/searchpaginated";
     }
 
 }

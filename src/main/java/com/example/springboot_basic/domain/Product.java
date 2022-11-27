@@ -16,22 +16,22 @@ import java.util.Date;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private long productId;
     @Column(columnDefinition = "nvarchar(100) not null")
     private String name;
     @Column(nullable = false)
     private int quantity;
-    @Column(nullable = false)
+    @Column()
     private  double unitPrice;
     @Column(length = 200)
     private String image;
-    @Column(nullable = false)
+    @Column()
     private String description;
     @Column
     private double discount;
     @Temporal(TemporalType.DATE)
     private Date enteredDate;
-    @Column(nullable = false)
+    @Column()
     private short status;
 //    @Column(nullable = false)
 //    private int categoryId;
@@ -39,4 +39,12 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
