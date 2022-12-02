@@ -55,6 +55,7 @@ public class ProductController {
         Product pr_entity = new Product();
         BeanUtils.copyProperties(productDto_view, pr_entity);
 
+        //từ view, lấy được ID của category(dropdown), set id đó cho product.categoryID
         Category category_db = new Category();
         category_db.setCategoryId(productDto_view.getCategoryId());
         pr_entity.setCategory(category_db);
