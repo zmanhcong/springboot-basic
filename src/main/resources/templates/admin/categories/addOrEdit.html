@@ -15,13 +15,19 @@
 </head>
 <body>
     <main class="container">
-        <header class="row text-center">
-            <nav class="row">
-                <div class="col">
-                    <div th:replace="admin/fragments/nav:: nav"></div>
-                </div>
-            </nav>
+        <!--Header-->
+        <header class="row">
+            <div class="col">
+                <div th:replace="admin/fragments/header:: header"></div>
+            </div>
         </header>
+        <nav class="row">
+            <div class="col">
+                <div th:replace="admin/fragments/nav:: nav"></div>
+            </div>
+        </nav>
+
+        <!--Body-->
         <section class="row">
             <div class="col-6 offset-3 mt-4">
                 <form th:action="@{/admin/categories/saveOrUpdate}" th:object="${category}" method="POST">
