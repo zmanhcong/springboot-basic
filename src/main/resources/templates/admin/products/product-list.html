@@ -35,37 +35,70 @@
                     List Products
                 </div>
                 <div class="card-body">
+                    <div th:if="${message != null}" class="alert alert-primary" role="alert">
+                        <i>[[${message}]]</i>
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <form>
+                                <div class="form-inline  float-left">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control ml-2" name="name" id="name"
+                                           placeholder="Input name">
+                                    <button class="btn btn-outline-primary ml-2">Search</button>
+                                </div>
+                            </form>
+                            <div class=" float-right">
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{/admin/products/add}">Add New products</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <table class="table table-striped table-inverse ">
                         <thead class="thead-inverse">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Unit Price</th>
-                                <th>Discount</th>
-                                <th>Status</th>
-                                <th>Category</th>
-                                <th></th>   <!--Dung de hien thi cac btt chuc nang-->
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Discount</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th></th>   <!--Dung de hien thi cac btt chuc nang-->
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>01</td>
-                                <td>Laptop</td>
-                                <td>20</td>
-                                <td>30$</td>
-                                <td>30%</td>
-                                <td>On-sale</td>
-                                <td>SSD 128GB</td>
-                                <td>
-                                    <a class="btn btn-outline-info"><i class="fas fa-info"></i></a>
-                                    <a class="btn btn-outline-warning"><i class="fas fa-edit"></i></a>
-                                    <a class="btn btn-outline-danger"><i class="fas fa-recycle"></i></a>
-                                </td>
-                            </tr>
+                        <tr th:each="product: ${products}">
+                            <td th:text="${product.productId}">01</td>
+                            <td th:text="${product.name}">Laptop</td>
+                            <td th:text="${product.quantity}">20</td>
+                            <td th:text="${product.unitPrice}">30$</td>
+                            <td th:text="${product.discount}">30%</td>
+                            <td th:text="${product.status}">On-sale</td>
+                            <td th:text="${product.category.name}">SSD 128GB</td>
+                            <td>
+                                <a th:href="@{'/admin/products/view/' + ${product.productId}}" class="btn btn-outline-info"><i class="fas fa-info"></i></a>
+                                <a th:href="@{'/admin/products/edit/' + ${product.productId}}"  class="btn btn-outline-warning"><i class="fas fa-edit"></i></a>
+                                <!--                                    <a th:href="@{'/admin/products/delete/' + ${product.productId}}"  class="btn btn-outline-danger"><i class="fas fa-recycle"></i></a>-->
+                                <a th:data-id="${product.productId}"
+                                   th:data-name="${product.name}"
+                                   onclick="ShowConfirmModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
+                                   class="btn btn-outline-danger"><i class="fas fa-recycle"></i>
+                                </a>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
 
+                    <script>
+                        function ShowConfirmModalDialog(id, name){
+                            $('#productName').text(name);
+                            $('#yesOption').attr('href','/admin/products/delete/' + id);
+                            $('#confirmationId').modal('show');
+                        }
+                    </script>  <!--Tạo ra function này rồi dùng ở chỗ có button delete. ( tại chỗ đó sẽ define id và name). ví dụ ở dòng 61, phía tren-->
 
                     <!-- Modal -->
                     <div class="modal fade" id="confirmationId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
@@ -91,17 +124,6 @@
                     </div>
                 </div>
                 <div class="card-footer text-muted">
-                    <form action="" method="get">
-                        <div class="form-inline float-left">
-                            <label for="">Page size: </label>
-                            <select class="form-control" name="" id="">
-                                <option>5</option>
-                                <option>10</option>
-                                <option>20</option>
-                                <option>30</option>
-                            </select>
-                        </div>
-                    </form>
                     <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-center">
                             <li class="page-item disabled">

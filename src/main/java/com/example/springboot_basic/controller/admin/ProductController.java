@@ -48,7 +48,7 @@ public class ProductController {
     public String list(ModelMap modelMap){
         List<Product> list = productService.findAll();
         modelMap.addAttribute("products", list);
-        return "/admin/products/list";
+        return "/admin/products/product-list";
     }
 
     @ModelAttribute("categories")  //share "categories" sang VIEW. dung drop-down cua Category o Product
@@ -99,7 +99,9 @@ public class ProductController {
         productService.save(pr_entity);
         modelMap.addAttribute("message", "Product is saved!!");
 
-        return new ModelAndView("forward:/admin/products/list", modelMap);
+        return new ModelAndView("forward:/admin/products/", modelMap);
     }
+
+
 
 }
