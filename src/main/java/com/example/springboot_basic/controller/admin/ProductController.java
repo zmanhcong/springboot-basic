@@ -9,29 +9,16 @@ import com.example.springboot_basic.service.ProductService;
 import com.example.springboot_basic.service.StorageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.IntStream;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("admin/products")
@@ -64,14 +51,6 @@ public class ProductController {
     public String add(Model model){
         model.addAttribute("product", new ProductDto());
         return "admin/products/addOrEdit";
-    }
-
-    @GetMapping("images/{filename:.+}")      //ta có tên file, mang tên file đó tìm trong folder rồi load for display images in addOrEdit.html khi view detail product.
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename){
-        Resource file = (Resource) storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @PostMapping("saveOrUpdate")
