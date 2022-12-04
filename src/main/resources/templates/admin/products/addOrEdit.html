@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Title</title>
     <!-- Required meta tags -->
@@ -15,16 +15,19 @@
 </head>
 <body>
     <main class="container">
-        <nav class="row">
-            <div class="col">
-                <div th:replace="admin/fragments/nav:: nav"></div>
-            </div>
-        </nav>
+        <header class="row text-center">
+            <nav class="row">
+                <div class="col">
+                    <div th:replace="admin/fragments/nav:: nav"></div>
+                </div>
+            </nav>
+        </header>
 
+        <!--Body-->
         <section class="row">
             <div class="col mt-2">
-                <form th:action="@{/admin/products/saveOrUpdate}" th:object="${product}" method="POST">
-                    <div class="card">
+                <form action="/admin/products/saveOrUpdate" th:object="${product}" method="POST" enctype="multipart/form-data">
+                    <div class="card">                                                                 <!--enctype="multipart/form-data: for upload file-->
                         <div class="card-header">
                             Add New Product
                         </div>
@@ -41,13 +44,17 @@
                                             <label for="name">Name</label>
                                             <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHid"
                                                    th:field="*{name}">
-                                            <small id="nameHid" class="form-text text-muted">Name is require</small>
+                                            <small id="nameHid"
+                                                   th:if="${#fields.hasErrors('name')}"
+                                                   class="form-text text-muted">Name is require</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="quantity">Quantity</label>
                                             <input type="text" class="form-control" name="quantity" id="quantity" aria-describedby="quantityHiD"
                                                    th:field="*{quantity}">
-                                            <small id="quantityHiD" class="form-text text-muted">Quantity is require!</small>
+                                            <small id="quantityHiD"
+                                                   th:if="${#fields.hasErrors('quantity')}"
+                                                   class="form-text text-muted">Quantity is require!</small>
                                         </div>
 
                                         <div class="input-group form-group">
@@ -67,13 +74,14 @@
                                         </div>
                                     </div>
 
+                                    <!--Sử dụng js để khi chọn hình thì hiển thị image prevew lên. nếu không có đoạn này thì không có image preview-->
                                     <script>
                                         function chooseFile(fileInput){
                                             if (fileInput.files && fileInput.files[0]){
                                                 var reader = new FileReader();
 
                                                 reader.onload = function(e){
-                                                    $('#image').attr('src', e.target.result);
+                                                    $('#image').attr('src', e.target.result);   /* lấy id là image, attribute là src -> xong rồi load ảnh vào đây để hiển thị.(nếu không có đoạn này thì không preview được ảnh */
                                                 }
                                                 reader.readAsDataURL(fileInput.files[0]);
                                             }
@@ -86,7 +94,7 @@
                                              src="images/no-image.png" width="90%" class="img-fluid rounded-top" alt="">
                                         <div class="form-group">
                                             <label for="productImage">Image File</label>
-                                            <input type="file" onchange="chooseFile(this)" class="form-control-file" name="" id="productImage">
+                                            <input type="file" onchange="chooseFile(this)" class="form-control-file" name="imageFile" id="productImage">
                                             <small id="productImageHid" class="form-text text-muted">Product image is require</small>
                                         </div>
                                         <div class="input-group form-group">
@@ -98,7 +106,7 @@
                                         <div class="form-group">
                                             <label for="status">Status</label>
                                             <select class="form-control" name="status" id="status"
-                                                    th:field="*{status}">>
+                                                    th:field="*{status}">
                                                 <option value="0">Out of Stock</option>
                                                 <option value="1">On Sale</option>
                                                 <option value="2">Featured</option>
@@ -113,23 +121,20 @@
                                             <div class="form-group">
                                                 <label for="description">Decription</label>
                                                 <textarea class="form-control" name="description" id="description" rows="3"
-                                                            th:field="*{description}"></textarea>
+                                                          th:field="*{description}"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-footer text-muted">
                                 <div class="form-group">
 
-                                        <a th:href="@{/admin/products/add}" class="btn btn-success">New</a>
-                                        <button class="btn btn-primary"
-                                                >Save</button>
-                                        <button class="btn btn-danger float-right"
-                                                th:if="${product.isEdit}"
-                                                th:href="@{'/admin/products/delete/' + ${product.productId}}"
-                                        >Delete</button>
+                                    <a th:href="@{/admin/products/add}" class="btn btn-success">New</a>
+                                    <button class="btn btn-primary"
+                                            >Save</button>
+                                    <a class="btn btn-danger float-right"
+                                            >Delete</a>
                                 </div>
                             </div>
                         </div>

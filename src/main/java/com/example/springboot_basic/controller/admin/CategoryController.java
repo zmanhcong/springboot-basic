@@ -65,7 +65,7 @@ public class CategoryController{
     //Update category
     @GetMapping("edit/{categoryId}")
     public ModelAndView edit(ModelMap modelMap, @PathVariable("categoryId") Long categoryId){
-        Optional<Category> findIdInDB = categoryService.findById(categoryId);
+       Optional<Category> findIdInDB = categoryService.findById(categoryId);
         CategoryDto categoryDto = new CategoryDto();
 
         if (findIdInDB.isPresent()) {

@@ -16,14 +16,14 @@ import java.util.Date;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productId;
+    private Long productId;
     @Column(columnDefinition = "nvarchar(100) not null")
     private String name;
     @Column(nullable = false)
     private int quantity;
     @Column()
     private  double unitPrice;
-    @Column(length = 200)
+    @Column()
     private String image;
     @Column()
     private String description;

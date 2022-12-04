@@ -16,7 +16,11 @@
 <body>
     <main class="container">
         <header class="row text-center">
-
+            <nav class="row">
+                <div class="col">
+                    <div th:replace="admin/fragments/nav:: nav"></div>
+                </div>
+            </nav>
         </header>
         <section class="row">
             <div class="col-6 offset-3 mt-4">
@@ -56,7 +60,11 @@
                 </form>
             </div>
         </section>
-        <footer class="row"></footer>
+        <footer class="row">
+            <div class="col">
+                <div th:replace="admin/fragments/footer:: footer"></div>
+            </div>
+        </footer>
     </main>
 
 <!-- Optional JavaScript -->
