@@ -7,8 +7,12 @@ import com.example.springboot_basic.model.ProductDto;
 import com.example.springboot_basic.service.CategoryService;
 import com.example.springboot_basic.service.ProductService;
 import com.example.springboot_basic.service.StorageService;
+import org.h2.engine.Mode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -16,8 +20,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -81,6 +87,26 @@ public class ProductController {
         return new ModelAndView("forward:/admin/products/", modelMap);
     }
 
+
+    //View detail and edit products
+    @GetMapping("images/{filename:.+}")      //ta có tên file, mang tên file đó tìm trong folder rồi load for display images in addOrEdit.html khi view detail product.
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename){
+        Resource file = (Resource) storageService.loadAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("edit/{productId}")
+    public ModelAndView edit(ModelMap modelMap, @PathVariable("productId") Long productId){
+        Optional<Product> opt_productDB = productService.findById(productId);
+        ProductDto dto_product = new ProductDto();
+
+        if (opt_productDB.isPresent()){
+            Product entity_product = opt_productDB.get();
+            BeanUtils.copyProperties(entity_product, dto_product);
+        }
+    }
 
 
 }
