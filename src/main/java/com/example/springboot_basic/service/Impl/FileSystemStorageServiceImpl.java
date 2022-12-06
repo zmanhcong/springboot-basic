@@ -9,14 +9,14 @@ import java.nio.file.StandardCopyOption;
 
 import com.example.springboot_basic.config.StorageProperties;
 import com.example.springboot_basic.exception.StorageException;
+import com.example.springboot_basic.exception.StorageFileNotFoundException;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.springboot_basic.service.StorageService;
-
-import javax.annotation.Resource;
 
 @Service
 public class FileSystemStorageServiceImpl implements StorageService{
@@ -36,7 +36,7 @@ public class FileSystemStorageServiceImpl implements StorageService{
     public void store(MultipartFile file, String storedFilename) {   //lưu file, với tham số đầu là file lấy từ view, tham số thứ 2 là tên file(tên file đã được đặt random)
         try {
             if (file.isEmpty()) {
-                throw new RuntimeException("Failed to store empty file");
+                throw new StorageException("Failed to store empty file");
             }
             Path destinationFile = this.rootLocation.resolve(Paths.get(storedFilename))   //resolve: dùng để path dựa trên rootLocation. exg: root: c/nmcong.. -> resolve: c/nmcong/fileName
                     .normalize().toAbsolutePath();
@@ -56,13 +56,13 @@ public class FileSystemStorageServiceImpl implements StorageService{
     public Resource loadAsResource(String filename) {   //ta có tên file, mang tên file đó tìm trong folder rồi load for display images in addOrEdit.html
         try {
             Path file = load(filename);
-            org.springframework.core.io.Resource resource = new UrlResource(file.toUri());   //URI syntax: scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
+            org.springframework.core.io.Resource resource = new UrlResource(file.toUri());   //URI chứa rất nhiêu thông tin, ví dụ: path: c:/nmcong/upload/image.png, file name, schema:file...vv..v URI syntax: scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
             if (resource.exists() || resource.isReadable()){
-                return (Resource) resource;
+                return resource;
             }
-            throw new StorageException("Could not read file: " + filename);
+            throw new StorageFileNotFoundException("Could not read file: " + filename);
         }catch (Exception e){
-            throw new StorageException("Could not read file: " + filename);
+            throw new StorageFileNotFoundException("Could not read file: " + filename);
         }
     }
 
@@ -85,7 +85,7 @@ public class FileSystemStorageServiceImpl implements StorageService{
             Files.createDirectories(rootLocation);
             System.out.println(rootLocation.toString());
         }catch (Exception e){
-            throw new Exception("Could not initialize storage", e);
+            throw new StorageException("Could not initialize storage", e);
         }
     }
 

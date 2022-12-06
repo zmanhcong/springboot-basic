@@ -105,8 +105,24 @@ public class ProductController {
         if (opt_productDB.isPresent()){
             Product entity_product = opt_productDB.get();
             BeanUtils.copyProperties(entity_product, dto_product);
+            dto_product.setIsEdit(true);
+
+            List<Category> categories = categoryService.findAll();
+            modelMap.addAttribute("categories", categories);
+            modelMap.addAttribute("product", dto_product);
+            return new ModelAndView("admin/products/addOrEdit");
         }
+
+        modelMap.addAttribute("message","Product is not exited");
+        return new ModelAndView("forward:/admin/products", modelMap);
     }
 
+    @GetMapping("delete/{productId}")
+    public ModelAndView delete(ModelMap modelMap,
+                               @PathVariable("productId") Long productId) {
+        productService.deleteById(productId);
+        modelMap.addAttribute("message", "Product is deleted!!!");
+        return new ModelAndView("forward:/admin/products/", modelMap);
+    }
 
 }
