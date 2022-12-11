@@ -27,7 +27,7 @@
         <section class="row">
             <div class="col mt-2">
                 <form action="/admin/products/saveOrUpdate" th:object="${product}" method="POST" enctype="multipart/form-data">
-                    <div class="card">                                                                 <!--enctype="multipart/form-data: for upload file-->
+                    <div class="card">                                                                 <!--enctype="multipart/form-data: for upload file, khi sử dụng enctype thì nó sẽ tìm đến: <input> type="file" -->
                         <div class="card-header">
                             <span th:if="${product.isEdit}">Edit Product</span>
                             <span th:unless="${product.isEdit}">Add New Product</span>
@@ -91,8 +91,9 @@
 
                                     <div class="col-5">
                                         <img id="image"
-                                             th:src="${product.image != null? '/admin/products/images/' + product.image : 'uploads/images/no-image.png'}"
-                                             width="90%" class="img-fluid rounded-top" alt="">
+                                             th:src="${product.image != null ? '/admin/products/images/' + product.image : '/images/no-image.png'}"
+                                             width="90%" class="img-fluid rounded-top" alt=""
+                                        >
                                         <div class="form-group">
                                             <label for="productImage">Image File</label>
                                             <input type="file" onchange="chooseFile(this)" class="form-control-file" name="imageFile" id="productImage">
